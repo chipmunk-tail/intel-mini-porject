@@ -1,6 +1,7 @@
 
 # OCR model = keras_ocr
 # pip install keras-ocr
+# pip install numpy==1.26.4
 
 import keras_ocr
 import matplotlib.pyplot as plt
@@ -30,6 +31,8 @@ for text, box in prediction_groups[0]:
     plt.plot(x_values + [x_values[0]], y_values + [y_values[0]], 'r-')
     plt.text(box[0][0], box[0][1], text, fontsize=12, color='blue', bbox=dict(facecolor='white', alpha=0.6))
 plt.axis("off")
-plt.show()
+plt.savefig('./test/test_img/result.png', dpi=300, bbox_inches='tight')
+plt.close()
+
 
 
