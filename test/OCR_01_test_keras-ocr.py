@@ -1,7 +1,6 @@
 
 # OCR model = keras_ocr
-# pip install keras-ocr
-# pip install numpy==1.26.4 keras==2.10 tensorflow==2.10
+# pip install tensorflow==2.10 keras-ocr
 
 import keras_ocr
 import matplotlib.pyplot as plt
@@ -10,8 +9,8 @@ import matplotlib.pyplot as plt
 pipeline = keras_ocr.pipeline.Pipeline()
 
 # OCR을 수행할 이미지 경로
-image_name = "exam02"
-image_format = ".png"
+image_name = "exam03"
+image_format = ".jpg"
 image_folder = "./test/test_img/"
 image_path = image_folder + image_name + image_format
 
@@ -52,7 +51,7 @@ for text, box in prediction_groups[0]:
     x_values = [point[0] for point in box]
     y_values = [point[1] for point in box]
 
-    axes[1].plot(x_values + [x_values[0]] + y_values + [y_values[0]], 'r-')
+    axes[1].plot(x_values + [x_values[0]], y_values + [y_values[0]], 'r-')
     axes[1].text(box[0][0], box[0][1], text, fontsize = 12, color = 'blue', bbox = dict(facecolor = 'white', alpha = 0.6))
 axes[1].set_title("OCR_result")
 axes[1].axis("off")
