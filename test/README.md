@@ -19,4 +19,12 @@ Tesseract 보다 더 자연스러운 외곡된 텍스트 감지
 
 
 
+### PaddleOCR
+
+중국 바이두에서 제공하는 OCR
+
+### easyOCR
+pytorch 기반의 CRNN 모델
+
+
 
