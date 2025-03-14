@@ -104,6 +104,7 @@ pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
 <img src="./result/Transrate_exam01.png" alt="system_info">
 <img src="./result/Transrate_exam02.png" alt="system_info">
 <img src="./result/Transrate_exam03.png" alt="system_info">
+<img src="./result/Transrate_exam04.png" alt="system_info">
 
 
 <br/>

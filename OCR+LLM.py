@@ -17,7 +17,7 @@ font_path = "./font/malgun.ttf"
 font_prop = fm.FontProperties(fname = font_path)
 
 # 이미지 경로 
-image_name = "exam03"
+image_name = "exam04"
 image_format = ".png"
 image_folder = "./test_image/"
 result_folder = "./result/"
