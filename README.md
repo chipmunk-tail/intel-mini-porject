@@ -104,9 +104,7 @@ OCR 모델은 Keras-OCR 모델을 선정하였다.
   - API 형식으로 LLM 이용
   - 2개의 프로세스가 필요 (OCR 번역 코드 진행) + (Ollama 구동)
 
-```
-pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
-```
+
 
 <br/>
 
@@ -116,6 +114,36 @@ pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
 <img src="./result/Transrate_exam02.png" alt="system_info">
 <img src="./result/Transrate_exam03.png" alt="system_info">
 <img src="./result/Transrate_exam04.png" alt="system_info">
+
+### 시연 방법
+
+1. 필요한 패키지 설치
+```
+pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
+```
+
+<br/>
+
+2. Ollama 설치 및 모델 로드
+```
+sudo apt update
+curl -fsSL https://ollama.com/install.sh | sh
+
+ollama pull phi4:14b-q8_0
+```
+
+<br/>
+
+3. ollama 모델 실행
+```
+ollama run phi4:14b-q8_0
+```
+(실습에 사용된 작업환경은 i3 12100 + 24GB 메모리 + GTX 1660 super환경에서 실행되었음!)
+
+<br/>
+
+4. 'OCR+LLM.py 실행
+새로운 터미널에서 해당 코드를 실행
 
 
 <br/>
