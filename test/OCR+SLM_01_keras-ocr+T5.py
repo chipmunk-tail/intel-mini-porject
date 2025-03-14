@@ -1,75 +1,71 @@
+#
+# pip install keras-ocr tensorflow==2.10 transformers matplotlib sentencepiece
+
 import keras_ocr
-import subprocess
 import matplotlib.pyplot as plt
-import cv2
-import numpy as np
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
-# Ollama로 번역하는 함수
-def use_ollama(prompt):
-    # Ollama 모델을 Docker 컨테이너에서 호출
-    result = subprocess.run(['ollama', 'run', 'phi4:14b-q8_0', '--text', prompt], capture_output=True, text=True)
-    return result.stdout.strip()  # 번역된 텍스트
-
-# Keras OCR pipeline 초기화
+# 1. Keras OCR 모델 로드
 pipeline = keras_ocr.pipeline.Pipeline()
 
-# 이미지 로드 및 OCR 수행
+# 2. 이미지 로드 및 OCR 수행
 image_name = "exam02"
 image_format = ".png"
 image_folder = "./test/test_img/"
 image_path = image_folder + image_name + image_format
 
-output_path = image_folder + "keras+phi4_" + image_name + "png"
+output_path = image_folder + "keras+T5_" + image_name + "png"
 
-# 이미지 읽기
-img = keras_ocr.tools.read(image_path)
+image = keras_ocr.tools.read(image_path)
+prediction_groups = pipeline.recognize([image])
 
-# OCR 처리 (이미지에서 텍스트 추출)
-prediction_groups = pipeline.recognize([img])
+# 3. T5 모델 로드 (영어 -> 한국어 번역)
+tokenizer = T5Tokenizer.from_pretrained("t5-small")
+model = T5ForConditionalGeneration.from_pretrained("t5-small")
 
-# OCR 결과 추출 (text와 box가 각각 2개의 값으로 반환됨)
-ocr_text = "\n".join([str(text) for text, _ in prediction_groups[0]])  # OCR로 추출한 텍스트
+def translate_text(text: str) -> str:
+    input_text = f"translate English to Korean: {text}"
+    input_ids = tokenizer.encode(input_text, return_tensors='pt', max_length=512, truncation=True)
+    outputs = model.generate(input_ids, max_length=512, num_beams=4, early_stopping=True)
+    translated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return translated_text
 
-# Ollama를 사용하여 번역 (OCR 결과를 한국어로 번역)
-translated_text = use_ollama(f"해당 문장을 한국어로 번역해줘!, 오타가 있다면 수정해주고, 번역본만 출력해줘: {ocr_text}")
-
-# 이미지 복사 (OCR 결과 표시용)
-img_with_ocr = img.copy()
-
-# OCR 결과 표시 (이미지에 텍스트 및 박스 그리기)
+# 4. OCR 결과에서 텍스트 추출 후 번역
+translated_texts = []
 for text, box in prediction_groups[0]:
-    pts = np.array(box, dtype=np.int32)  # 좌표를 int32로 변환
-    pts = pts.reshape((-1, 1, 2))
-    cv2.polylines(img_with_ocr, [pts], isClosed=True, color=(0, 255, 0), thickness=2)
-    cv2.putText(img_with_ocr, str(text), tuple(pts[0][0]), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+    translated_text = translate_text(text)  # 영어에서 한국어로 번역
+    translated_texts.append((translated_text, box))
 
-# 번역된 텍스트 이미지 (한국어 번역 출력)
-img_with_translation = img.copy()
-
-# 번역된 텍스트 삽입
-cv2.putText(img_with_translation, translated_text, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 0), 3)
-
-# Subplot으로 결과 출력
+# 5. 결과 시각화
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 # 원본 이미지 표시
-axes[0].imshow(img)
+axes[0].imshow(image)
 axes[0].set_title("Original Image")
 axes[0].axis('off')
 
 # OCR 결과 표시
-axes[1].imshow(img_with_ocr)
+axes[1].imshow(image)
+for text, box in prediction_groups[0]:
+    x_values = [point[0] for point in box]
+    y_values = [point[1] for point in box]
+    axes[1].plot(x_values + [x_values[0]], y_values + [y_values[0]], 'r-')
+    axes[1].text(box[0][0], box[0][1], text, fontsize=12, color='blue', bbox=dict(facecolor='white', alpha=0.6))
 axes[1].set_title("OCR Result")
 axes[1].axis('off')
 
 # 번역된 텍스트 표시
-axes[2].imshow(img_with_translation)
+axes[2].imshow(image)
+for translated_text, box in translated_texts:
+    x_values = [point[0] for point in box]
+    y_values = [point[1] for point in box]
+    axes[2].plot(x_values + [x_values[0]], y_values + [y_values[0]], 'r-')
+    axes[2].text(box[0][0], box[0][1], translated_text, fontsize=12, color='green', bbox=dict(facecolor='white', alpha=0.6))
 axes[2].set_title("Translated Text")
 axes[2].axis('off')
 
 # 결과 출력
 plt.tight_layout()
-
 # 결과 저장
-plt.savefig(output_path, dpi=300, bbox_inches='tight')
+plt.savefig(output_path, dpi = 300, bbox_inches = 'tight')
 plt.close()
