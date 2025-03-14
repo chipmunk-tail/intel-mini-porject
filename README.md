@@ -1,4 +1,4 @@
-# 
+# OCR + LLM을 이용한 이미지 텍스트 번역기
 
 
 
@@ -26,7 +26,7 @@
 - 네이버의 CRAFT 알고리즘을 사용
 - CRNN 기반 모델
 
-<img src="./src_img/OCR_kerasOCR.png" alt="system_info" width="500">
+<img src="./src_img/OCR_kerasOCR.png" alt="system_info">
 
 표지판의 모든 텍스트를 검출한 모습이다.
 
@@ -36,7 +36,7 @@
 - 중국 바이두에서 개발한 인공지능 OCR
 - 여러 사이즈의 모델을 제공하며 테스트는 'samll' 모델로 진행
 
-<img src="./src_img/OCR_paddleOCR.png" alt="system_info" width="500">
+<img src="./src_img/OCR_paddleOCR.png" alt="system_info">
 
 'orchard' 까지 검출하고 'pl'는 검출하지 못함
 
@@ -46,7 +46,7 @@
 - pytorch 기반 CRNN 
 - 네이버의 CRAFT 알고리즘을 사용
 
-<img src="./src_img/OCR_easyOCR.png" alt="system_info" width="500">
+<img src="./src_img/OCR_easyOCR.png" alt="system_info" >
 
 'orchard' 까지 검출하고 'pl'는 검출하지 못함
 
@@ -63,7 +63,7 @@ OCR 모델은 Keras-OCR 모델을 선정하였다.
 - 번역, 요약, 질문 응답 등 여러 작업에 유용하게 사용
 - 다양한 언어 쌍을 지원
 
-<img src="./src_img/keras+T5.png" alt="system_info" width="500">
+<img src="./src_img/keras+T5.png" alt="system_info" >
 
 번역이 이상하게 진행되었다.
 
@@ -73,7 +73,7 @@ OCR 모델은 Keras-OCR 모델을 선정하였다.
 - Ollama에서 'phi4:14b-q8_0' 양자화 모델을 구동
 - 사용할 수 있는 자원 중 자연스러운 한국어를 출력하는 phi4 모델을 사용
 
-<img src="./src_img/keras+phi4.png" alt="system_info" width="500">
+<img src="./src_img/keras+phi4.png" alt="system_info">
 
 속도가 느리지만 자연스럽게 한국어를 출력했다.
 
@@ -95,10 +95,16 @@ OCR 모델은 Keras-OCR 모델을 선정하였다.
   - API 형식으로 LLM 이용
   - 2개의 프로세스가 필요 (OCR 번역 코드 진행) + (Ollama 구동)
 
+```
+pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
+```
 
 ## 시연
 
-<img src="./src_img/system_info.png" alt="system_info" width="500">
+<img src="./src_img/Transrate_exam01.png" alt="system_info">
+<img src="./src_img/Transrate_exam02.png" alt="system_info">
+<img src="./src_img/Transrate_exam03.png" alt="system_info">
+
 
 <br/>
 
@@ -113,7 +119,7 @@ keras OCR, PaddleOCR, EasyOCR 이 3개의 OCR 모델은 여러 언어를 지원�
 
 ### 텍스트가 이미지 밖으로 잘려서 출력됨
 
-<img src="./src_img/exam02_CASE_bad_01.png" alt="system_info" width="500">
+<img src="./src_img/exam02_CASE_bad_01.png" alt="system_info">
 
 ```
 OCR : danger
@@ -138,7 +144,8 @@ OCR과 LLM을 통한 번역이 자연스럽게 진행되었지만 이미지에 �
 ### 자연스러운 문장을 위해 LLM을 사용했지만 결과가 다르게 나옴
 
 **CASE_01**
-<img src="./src_img/exam01_CASE_bad_01.png" alt="system_info" width="500">
+
+<img src="./src_img/exam01_CASE_bad_01.png" alt="system_info">
 
 터미널 결과창 : 
 ```
@@ -157,7 +164,8 @@ LLM이 전달받은 문자열을 전부 통합하여 번역을 진행하여 결�
 <br/>
 
 **CASE_02**
-<img src="./src_img/exam01_CASE_bad_02.png" alt="system_info" width="500">
+
+<img src="./src_img/exam01_CASE_bad_02.png" alt="system_info">
 
 터미널 결과창 : 
 ```
@@ -179,7 +187,8 @@ LLM의 파라미터가 작아서 이상한 문장을 반환하는 경우가 발�
 ### OCR 모델의 한계
 
 **CASE_01**
-<img src="./src_img/exam01_CASE_bad_03.png" alt="system_info" width="500">
+
+<img src="./src_img/exam01_CASE_bad_03.png" alt="system_info">
 
 터미널 결과창 : 
 ```
@@ -197,7 +206,8 @@ OCR: 'coffes' at (124, 425) → 번역:
 <br/>
 
 **CASE_02**
-<img src="./src_img/exam03_CASE_bad_01.png" alt="system_info" width="500">
+
+<img src="./src_img/exam03_CASE_bad_01.png" alt="system_info">
 
 ```
 OCR : motorcycles
@@ -205,13 +215,5 @@ roo
 entry
 phi4 : 바이크, 루, 입력
 ```
-
-오염된 표지판은 문자 추출을 잘 하지 못하여 뜻이 왜곡된 모습이다.
-
-
-
-CV는 한국어 출력이 지원되지 않는다.
-  PIL 이용
-
 
 

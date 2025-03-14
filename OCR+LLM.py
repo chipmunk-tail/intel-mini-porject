@@ -1,6 +1,6 @@
 
 # 사용하는 패키지 목록
-# pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python
+# pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python re
 
 import keras_ocr
 import ollama
@@ -78,7 +78,7 @@ font_translation = ImageFont.truetype(font_path, 20)
 # 텍스트 표시
 for (text, box), translated_text in zip(ocr_results, translated_lines):
     pts = np.array(box, dtype=np.int32).reshape((-1, 1, 2))
-    cv2.polylines(np.array(img_ocr), [pts], isClosed=True, color=(0, 255, 0), thickness=2)
+    cv2.polylines(np.array(img_ocr), [pts], isClosed=True, color=(0, 255, 0), thickness = 1)
 
     x, y = int(box[0][0]), int(box[0][1])  
     print(f"OCR: '{text}' at ({x}, {y}) → 번역: '{translated_text}'")
