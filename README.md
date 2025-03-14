@@ -157,6 +157,16 @@ keras OCR, PaddleOCR, EasyOCR 이 3개의 OCR 모델은 여러 언어를 지원�
 
 <br/>
 
+### CV2의 한글 폰트 미지원
+
+<img src="./src_img/CV_font_issue.png" alt="system_info">
+
+CV2 기본 폰트에서 한글을 지원하지 않아서 '?????' 형태로 출력
+
+해당 문제는 폰트 파일을 추가함으로써 해결하였다.
+
+<br/>
+
 ### 텍스트가 이미지 밖으로 잘려서 출력됨
 
 <img src="./src_img/exam02_CASE_bad_01.png" alt="system_info">
@@ -179,7 +189,6 @@ OCR: 'may' at (56, 307) → 번역: '기관에 손상을 줄 수 있습니다.'
 OCR과 LLM을 통한 번역이 자연스럽게 진행되었지만 이미지에 텍스트를 삽입하는 과정에서 텍스트가 밖으로 나가는 문제점이 발생함
 
 <br/>
-
 
 ### 자연스러운 문장을 위해 LLM을 사용했지만 결과가 다르게 나옴
 
