@@ -17,9 +17,9 @@ font_path = "./font/malgun.ttf"
 font_prop = fm.FontProperties(fname = font_path)
 
 # 이미지 경로 
-image_name = "exam06"
+image_name = "exam03"
 image_format = ".png"
-image_folder = "./image/"
+image_folder = "./test_image/"
 result_folder = "./result/"
 image_path = image_folder + image_name + image_format
 output_path = result_folder + "Transrate_" + image_name + ".png"
@@ -49,13 +49,11 @@ def draw_text_with_outline(draw, position, text, font, text_color, outline_color
 # Keras OCR 초기화
 pipeline = keras_ocr.pipeline.Pipeline()
 
-
 # 이미지 읽기
 original_img = Image.open(image_path)
 img = keras_ocr.tools.read(image_path)
 img_ocr = original_img.copy()
 img_translated = original_img.copy()
-
 
 # OCR 처리
 prediction_groups = pipeline.recognize([img])
@@ -64,13 +62,11 @@ target_texts = [text for text, _ in ocr_results]
 ocr_text = "\n".join(target_texts)
 print("OCR :", ocr_text)
 
-
 # Ollama 번역
 translated_text = use_ollama(ocr_text)
 print("phi4 :", translated_text)
 translated_text_cleaned = re.sub(r"\(.*?\)", "", translated_text).strip()
 translated_lines = translated_text_cleaned.split("\n")
-
 
 # 이미지 편집을 위한 PIL 객체 생성
 draw_ocr = ImageDraw.Draw(img_ocr)
@@ -79,18 +75,21 @@ font_ocr = ImageFont.truetype(font_path, 20)
 font_translation = ImageFont.truetype(font_path, 20)
 
 
-for i, ((text, box), translated_text) in enumerate(zip(ocr_results, translated_lines)):
+# 텍스트 표시
+for (text, box), translated_text in zip(ocr_results, translated_lines):
     pts = np.array(box, dtype=np.int32).reshape((-1, 1, 2))
-    cv2.polylines(np.array(img_ocr), [pts], isClosed=True, color=(0, 255, 0), thickness=1)
+    cv2.polylines(np.array(img_ocr), [pts], isClosed=True, color=(0, 255, 0), thickness=2)
 
     x, y = int(box[0][0]), int(box[0][1])  
-    print(f"OCR {i}: '{text}' at ({x}, {y}) → 번역: '{translated_text}'")
+    print(f"OCR: '{text}' at ({x}, {y}) → 번역: '{translated_text}'")
 
     # OCR 텍스트 출력 - 초록색
     draw_text_with_outline(draw_ocr, (x, y - 25), text, font_ocr, text_color=(0, 255, 0), outline_color=(0, 0, 0))
 
     # 번역 텍스트 출력 - 빨간색
     draw_text_with_outline(draw_translated, (x, y - 25), translated_text, font_translation, text_color=(255, 0, 0), outline_color=(0, 0, 0))
+
+# 결과 출력
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
 # 원본
