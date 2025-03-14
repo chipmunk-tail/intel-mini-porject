@@ -1,12 +1,13 @@
 # OCR + LLM을 이용한 이미지 텍스트 번역기
+인텔 AISW 아카데미 인텔 미니 프로젝트
 
+2025.03.12 ~ 2525.03.14
 
+<img src="./result/Transrate_exam01.png" alt="system_info">
+
+<br/>
 
 ## 개요
-
-
-## 목적
-
 **OCR** + **LLM** 을 이용하여 이미지 속 언어를 한국어로 번역해서 이미지로 다시 출력해주는 미니 프로젝트
 
 **OCR**
@@ -14,6 +15,14 @@
 
 **LLM**
 - OCR로 입력받은 텍스트를 LLM을 이용해 자연스럽게 번역
+
+<br/>
+
+## 목적
+
+1. 이미지에서 텍스트를 추출
+2. 추출한 텍스트를 LLM에 입력하여 번역
+3. 번역된 텍스트를 다시 이미지 위에 출력 후 저장
 
 <br/>
 
@@ -98,6 +107,8 @@ OCR 모델은 Keras-OCR 모델을 선정하였다.
 ```
 pip install tensorflow==2.10 keras-ocr ollama matplotlib opencv-python PIL re
 ```
+
+<br/>
 
 ## 시연
 
